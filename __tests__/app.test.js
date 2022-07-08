@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const { agent } = require('supertest');
 jest.mock('../lib/services/github');
 
 describe('gitty routes', () => {
@@ -16,7 +17,7 @@ describe('gitty routes', () => {
   it('route should redirect to github oauth page at login', async () => {
     const res = await request(app).get('/api/v1/github/login');
     expect(res.header.location).toMatch(
-      `https://github.com/login/oauth/authorize?client_id=${process.env.GH_CLIENT_ID}&scope=user&redirect_`
+      `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}&scope=user&redirect_`
     );
   });
 
@@ -35,4 +36,31 @@ describe('gitty routes', () => {
       exp: expect.any(Number),
     });
   });
+
+  it('DELETE /sessions should sign out a user', async () => {
+    const res = await request(app).delete('/api/v1/github/sessions');
+    expect(res.body.message).toEqual('Signed out');
+  });
+
+  // it('allows logged in user to see all posts', async () => {
+  //   const res = await request(app).get('/api/v1/posts');
+  //   expect(res.status).toBe(401);
+  //   const user = await request
+  //     .agent(app)
+  //     .get('/api/v1/github/login/callback?code=1')
+  //     .redirects(1);
+
+  //   expect(user.body).toEqual({
+  //     id: expect.any(String),
+  //     username: 'fake_github_user',
+  //     email: 'not-real@example.com',
+  //     avatar: expect.any(String),
+  //     iat: expect.any(Number),
+  //     exp: expect.any(Number),
+  //   });
+  //   const posts = await agent.get('/api/v1/posts');
+  //   expect(posts.status).toBe(200);
+  // });
+
+  /////////////
 });
