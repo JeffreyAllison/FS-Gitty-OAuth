@@ -41,26 +41,4 @@ describe('gitty routes', () => {
     const res = await request(app).delete('/api/v1/github/sessions');
     expect(res.body.message).toEqual('Signed out');
   });
-
-  // it('allows logged in user to see all posts', async () => {
-  //   const res = await request(app).get('/api/v1/posts');
-  //   expect(res.status).toBe(401);
-  //   const user = await request
-  //     .agent(app)
-  //     .get('/api/v1/github/login/callback?code=1')
-  //     .redirects(1);
-
-  //   expect(user.body).toEqual({
-  //     id: expect.any(String),
-  //     username: 'fake_github_user',
-  //     email: 'not-real@example.com',
-  //     avatar: expect.any(String),
-  //     iat: expect.any(Number),
-  //     exp: expect.any(Number),
-  //   });
-  //   const posts = await agent.get('/api/v1/posts');
-  //   expect(posts.status).toBe(200);
-  // });
-
-  /////////////
 });
